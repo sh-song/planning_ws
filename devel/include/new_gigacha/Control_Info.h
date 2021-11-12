@@ -24,29 +24,22 @@ struct Control_Info_
   typedef Control_Info_<ContainerAllocator> Type;
 
   Control_Info_()
-    : auto_manual(0)
-    , emergency_stop(0)
+    : emergency_stop(0)
     , gear(0)
     , speed(0.0)
     , steer(0.0)
-    , brake(0)
-    , encoder(0.0)  {
+    , brake(0)  {
     }
   Control_Info_(const ContainerAllocator& _alloc)
-    : auto_manual(0)
-    , emergency_stop(0)
+    : emergency_stop(0)
     , gear(0)
     , speed(0.0)
     , steer(0.0)
-    , brake(0)
-    , encoder(0.0)  {
+    , brake(0)  {
   (void)_alloc;
     }
 
 
-
-   typedef int16_t _auto_manual_type;
-  _auto_manual_type auto_manual;
 
    typedef int16_t _emergency_stop_type;
   _emergency_stop_type emergency_stop;
@@ -62,9 +55,6 @@ struct Control_Info_
 
    typedef int16_t _brake_type;
   _brake_type brake;
-
-   typedef float _encoder_type;
-  _encoder_type encoder;
 
 
 
@@ -95,13 +85,11 @@ return s;
 template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::new_gigacha::Control_Info_<ContainerAllocator1> & lhs, const ::new_gigacha::Control_Info_<ContainerAllocator2> & rhs)
 {
-  return lhs.auto_manual == rhs.auto_manual &&
-    lhs.emergency_stop == rhs.emergency_stop &&
+  return lhs.emergency_stop == rhs.emergency_stop &&
     lhs.gear == rhs.gear &&
     lhs.speed == rhs.speed &&
     lhs.steer == rhs.steer &&
-    lhs.brake == rhs.brake &&
-    lhs.encoder == rhs.encoder;
+    lhs.brake == rhs.brake;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -158,12 +146,12 @@ struct MD5Sum< ::new_gigacha::Control_Info_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "f14c0811292ee3221e383efec3a1d50e";
+    return "3dc9a678baa6090d119c5483385b8223";
   }
 
   static const char* value(const ::new_gigacha::Control_Info_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xf14c0811292ee322ULL;
-  static const uint64_t static_value2 = 0x1e383efec3a1d50eULL;
+  static const uint64_t static_value1 = 0x3dc9a678baa6090dULL;
+  static const uint64_t static_value2 = 0x119c5483385b8223ULL;
 };
 
 template<class ContainerAllocator>
@@ -182,13 +170,11 @@ struct Definition< ::new_gigacha::Control_Info_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "int16 auto_manual\n"
-"int16 emergency_stop\n"
+    return "int16 emergency_stop\n"
 "int16 gear\n"
 "float32 speed\n"
 "float32 steer\n"
 "int16 brake\n"
-"float32 encoder\n"
 ;
   }
 
@@ -207,13 +193,11 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.auto_manual);
       stream.next(m.emergency_stop);
       stream.next(m.gear);
       stream.next(m.speed);
       stream.next(m.steer);
       stream.next(m.brake);
-      stream.next(m.encoder);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -232,8 +216,6 @@ struct Printer< ::new_gigacha::Control_Info_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::new_gigacha::Control_Info_<ContainerAllocator>& v)
   {
-    s << indent << "auto_manual: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.auto_manual);
     s << indent << "emergency_stop: ";
     Printer<int16_t>::stream(s, indent + "  ", v.emergency_stop);
     s << indent << "gear: ";
@@ -244,8 +226,6 @@ struct Printer< ::new_gigacha::Control_Info_<ContainerAllocator> >
     Printer<float>::stream(s, indent + "  ", v.steer);
     s << indent << "brake: ";
     Printer<int16_t>::stream(s, indent + "  ", v.brake);
-    s << indent << "encoder: ";
-    Printer<float>::stream(s, indent + "  ", v.encoder);
   }
 };
 

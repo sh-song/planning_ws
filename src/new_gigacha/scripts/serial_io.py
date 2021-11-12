@@ -20,7 +20,6 @@ class Serial_IO:
 
         # Messages/Data
         self.serial_msg = Serial_Info()  # Message to publish
-        self.serial_data = []
         self.alive = 0
 
         #Subscribe Control Info from Controller
@@ -35,8 +34,6 @@ class Serial_IO:
         # Main Loop
         rate = rospy.Rate(20)
         while not rospy.is_shutdown():
-            # print("----------loop!")
-
             self.serialWrite()
             rate.sleep()
 

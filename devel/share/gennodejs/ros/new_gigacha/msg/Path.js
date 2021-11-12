@@ -21,6 +21,9 @@ class Path {
       this.x = null;
       this.y = null;
       this.heading = null;
+      this.k = null;
+      this.env = null;
+      this.mission = null;
     }
     else {
       if (initObj.hasOwnProperty('x')) {
@@ -41,6 +44,24 @@ class Path {
       else {
         this.heading = [];
       }
+      if (initObj.hasOwnProperty('k')) {
+        this.k = initObj.k
+      }
+      else {
+        this.k = [];
+      }
+      if (initObj.hasOwnProperty('env')) {
+        this.env = initObj.env
+      }
+      else {
+        this.env = [];
+      }
+      if (initObj.hasOwnProperty('mission')) {
+        this.mission = initObj.mission
+      }
+      else {
+        this.mission = [];
+      }
     }
   }
 
@@ -52,6 +73,12 @@ class Path {
     bufferOffset = _arraySerializer.float64(obj.y, buffer, bufferOffset, null);
     // Serialize message field [heading]
     bufferOffset = _arraySerializer.float64(obj.heading, buffer, bufferOffset, null);
+    // Serialize message field [k]
+    bufferOffset = _arraySerializer.float64(obj.k, buffer, bufferOffset, null);
+    // Serialize message field [env]
+    bufferOffset = _arraySerializer.string(obj.env, buffer, bufferOffset, null);
+    // Serialize message field [mission]
+    bufferOffset = _arraySerializer.string(obj.mission, buffer, bufferOffset, null);
     return bufferOffset;
   }
 
@@ -65,6 +92,12 @@ class Path {
     data.y = _arrayDeserializer.float64(buffer, bufferOffset, null)
     // Deserialize message field [heading]
     data.heading = _arrayDeserializer.float64(buffer, bufferOffset, null)
+    // Deserialize message field [k]
+    data.k = _arrayDeserializer.float64(buffer, bufferOffset, null)
+    // Deserialize message field [env]
+    data.env = _arrayDeserializer.string(buffer, bufferOffset, null)
+    // Deserialize message field [mission]
+    data.mission = _arrayDeserializer.string(buffer, bufferOffset, null)
     return data;
   }
 
@@ -73,7 +106,14 @@ class Path {
     length += 8 * object.x.length;
     length += 8 * object.y.length;
     length += 8 * object.heading.length;
-    return length + 12;
+    length += 8 * object.k.length;
+    object.env.forEach((val) => {
+      length += 4 + _getByteLength(val);
+    });
+    object.mission.forEach((val) => {
+      length += 4 + _getByteLength(val);
+    });
+    return length + 24;
   }
 
   static datatype() {
@@ -83,7 +123,7 @@ class Path {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '63cd5de732df3de790b9ea37ac16d56c';
+    return '0c0d921e9132160b23d521caaec99f12';
   }
 
   static messageDefinition() {
@@ -92,6 +132,9 @@ class Path {
     float64[] x
     float64[] y
     float64[] heading
+    float64[] k
+    string[] env
+    string[] mission
     `;
   }
 
@@ -120,6 +163,27 @@ class Path {
     }
     else {
       resolved.heading = []
+    }
+
+    if (msg.k !== undefined) {
+      resolved.k = msg.k;
+    }
+    else {
+      resolved.k = []
+    }
+
+    if (msg.env !== undefined) {
+      resolved.env = msg.env;
+    }
+    else {
+      resolved.env = []
+    }
+
+    if (msg.mission !== undefined) {
+      resolved.mission = msg.mission;
+    }
+    else {
+      resolved.mission = []
     }
 
     return resolved;

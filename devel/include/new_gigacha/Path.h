@@ -26,12 +26,18 @@ struct Path_
   Path_()
     : x()
     , y()
-    , heading()  {
+    , heading()
+    , k()
+    , env()
+    , mission()  {
     }
   Path_(const ContainerAllocator& _alloc)
     : x(_alloc)
     , y(_alloc)
-    , heading(_alloc)  {
+    , heading(_alloc)
+    , k(_alloc)
+    , env(_alloc)
+    , mission(_alloc)  {
   (void)_alloc;
     }
 
@@ -45,6 +51,15 @@ struct Path_
 
    typedef std::vector<double, typename ContainerAllocator::template rebind<double>::other >  _heading_type;
   _heading_type heading;
+
+   typedef std::vector<double, typename ContainerAllocator::template rebind<double>::other >  _k_type;
+  _k_type k;
+
+   typedef std::vector<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > , typename ContainerAllocator::template rebind<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::other >  _env_type;
+  _env_type env;
+
+   typedef std::vector<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > , typename ContainerAllocator::template rebind<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::other >  _mission_type;
+  _mission_type mission;
 
 
 
@@ -77,7 +92,10 @@ bool operator==(const ::new_gigacha::Path_<ContainerAllocator1> & lhs, const ::n
 {
   return lhs.x == rhs.x &&
     lhs.y == rhs.y &&
-    lhs.heading == rhs.heading;
+    lhs.heading == rhs.heading &&
+    lhs.k == rhs.k &&
+    lhs.env == rhs.env &&
+    lhs.mission == rhs.mission;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -134,12 +152,12 @@ struct MD5Sum< ::new_gigacha::Path_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "63cd5de732df3de790b9ea37ac16d56c";
+    return "0c0d921e9132160b23d521caaec99f12";
   }
 
   static const char* value(const ::new_gigacha::Path_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x63cd5de732df3de7ULL;
-  static const uint64_t static_value2 = 0x90b9ea37ac16d56cULL;
+  static const uint64_t static_value1 = 0x0c0d921e9132160bULL;
+  static const uint64_t static_value2 = 0x23d521caaec99f12ULL;
 };
 
 template<class ContainerAllocator>
@@ -161,6 +179,9 @@ struct Definition< ::new_gigacha::Path_<ContainerAllocator> >
     return "float64[] x\n"
 "float64[] y\n"
 "float64[] heading\n"
+"float64[] k\n"
+"string[] env\n"
+"string[] mission\n"
 ;
   }
 
@@ -182,6 +203,9 @@ namespace serialization
       stream.next(m.x);
       stream.next(m.y);
       stream.next(m.heading);
+      stream.next(m.k);
+      stream.next(m.env);
+      stream.next(m.mission);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -217,6 +241,24 @@ struct Printer< ::new_gigacha::Path_<ContainerAllocator> >
     {
       s << indent << "  heading[" << i << "]: ";
       Printer<double>::stream(s, indent + "  ", v.heading[i]);
+    }
+    s << indent << "k[]" << std::endl;
+    for (size_t i = 0; i < v.k.size(); ++i)
+    {
+      s << indent << "  k[" << i << "]: ";
+      Printer<double>::stream(s, indent + "  ", v.k[i]);
+    }
+    s << indent << "env[]" << std::endl;
+    for (size_t i = 0; i < v.env.size(); ++i)
+    {
+      s << indent << "  env[" << i << "]: ";
+      Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.env[i]);
+    }
+    s << indent << "mission[]" << std::endl;
+    for (size_t i = 0; i < v.mission.size(); ++i)
+    {
+      s << indent << "  mission[" << i << "]: ";
+      Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.mission[i]);
     }
   }
 };

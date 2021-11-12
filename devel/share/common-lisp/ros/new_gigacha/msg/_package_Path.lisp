@@ -5,4 +5,10 @@
           Y
           HEADING-VAL
           HEADING
+          K-VAL
+          K
+          ENV-VAL
+          ENV
+          MISSION-VAL
+          MISSION
 ))

@@ -18,21 +18,13 @@ class Control_Info {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.auto_manual = null;
       this.emergency_stop = null;
       this.gear = null;
       this.speed = null;
       this.steer = null;
       this.brake = null;
-      this.encoder = null;
     }
     else {
-      if (initObj.hasOwnProperty('auto_manual')) {
-        this.auto_manual = initObj.auto_manual
-      }
-      else {
-        this.auto_manual = 0;
-      }
       if (initObj.hasOwnProperty('emergency_stop')) {
         this.emergency_stop = initObj.emergency_stop
       }
@@ -63,19 +55,11 @@ class Control_Info {
       else {
         this.brake = 0;
       }
-      if (initObj.hasOwnProperty('encoder')) {
-        this.encoder = initObj.encoder
-      }
-      else {
-        this.encoder = 0.0;
-      }
     }
   }
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type Control_Info
-    // Serialize message field [auto_manual]
-    bufferOffset = _serializer.int16(obj.auto_manual, buffer, bufferOffset);
     // Serialize message field [emergency_stop]
     bufferOffset = _serializer.int16(obj.emergency_stop, buffer, bufferOffset);
     // Serialize message field [gear]
@@ -86,8 +70,6 @@ class Control_Info {
     bufferOffset = _serializer.float32(obj.steer, buffer, bufferOffset);
     // Serialize message field [brake]
     bufferOffset = _serializer.int16(obj.brake, buffer, bufferOffset);
-    // Serialize message field [encoder]
-    bufferOffset = _serializer.float32(obj.encoder, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -95,8 +77,6 @@ class Control_Info {
     //deserializes a message object of type Control_Info
     let len;
     let data = new Control_Info(null);
-    // Deserialize message field [auto_manual]
-    data.auto_manual = _deserializer.int16(buffer, bufferOffset);
     // Deserialize message field [emergency_stop]
     data.emergency_stop = _deserializer.int16(buffer, bufferOffset);
     // Deserialize message field [gear]
@@ -107,13 +87,11 @@ class Control_Info {
     data.steer = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [brake]
     data.brake = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [encoder]
-    data.encoder = _deserializer.float32(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 20;
+    return 14;
   }
 
   static datatype() {
@@ -123,19 +101,18 @@ class Control_Info {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'f14c0811292ee3221e383efec3a1d50e';
+    return '3dc9a678baa6090d119c5483385b8223';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    int16 auto_manual
     int16 emergency_stop
     int16 gear
     float32 speed
     float32 steer
     int16 brake
-    float32 encoder
+    
     `;
   }
 
@@ -145,13 +122,6 @@ class Control_Info {
       msg = {};
     }
     const resolved = new Control_Info(null);
-    if (msg.auto_manual !== undefined) {
-      resolved.auto_manual = msg.auto_manual;
-    }
-    else {
-      resolved.auto_manual = 0
-    }
-
     if (msg.emergency_stop !== undefined) {
       resolved.emergency_stop = msg.emergency_stop;
     }
@@ -185,13 +155,6 @@ class Control_Info {
     }
     else {
       resolved.brake = 0
-    }
-
-    if (msg.encoder !== undefined) {
-      resolved.encoder = msg.encoder;
-    }
-    else {
-      resolved.encoder = 0.0
     }
 
     return resolved;
