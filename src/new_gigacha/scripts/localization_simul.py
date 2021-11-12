@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import serial #Serial USB
-import socket #UDP LAN
 import rospy
 from geometry_msgs.msg import Pose
 from new_gigacha.msg import Local
