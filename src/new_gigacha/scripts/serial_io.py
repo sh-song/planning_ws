@@ -2,9 +2,9 @@
 from utils.sig_int_handler import Activate_Signal_Interrupt_Handler
 import serial
 from new_gigacha.msg import Serial_Info
+from new_gigacha.msg import Control_Info
 import threading
 import struct
-
 import rospy
 
 
@@ -23,6 +23,9 @@ class Serial_IO:
         self.serial_data = []
         self.alive = 0
 
+        #Subscribe Control Info from Controller
+        rospy.Subscriber("/controller", Control_Info, self.controlCallback)
+        self.control_input = Control_Info()
 
         # Serial Read Thread
         th_serialRead = threading.Thread(target=self.serialRead)
@@ -34,7 +37,7 @@ class Serial_IO:
         while not rospy.is_shutdown():
             # print("----------loop!")
 
-            # self.serialWrite()
+            self.serialWrite()
             rate.sleep()
 
 
@@ -54,7 +57,7 @@ class Serial_IO:
                     #speed, steer
                     tmp1, tmp2 = struct.unpack("2h", packet[6:10])
                     self.serial_msg.speed = tmp1 / 10  # km/h
-                    self.serial_msg.steer = -tmp2 / 71  # degree
+                    self.serial_msg.steer = tmp2 / 71  # degree
 
                     #brake
                     self.serial_msg.brake = struct.unpack("B", packet[10:11])[0]
@@ -68,8 +71,49 @@ class Serial_IO:
 
                     self.serial_pub.publish(self.serial_msg)
 
+    def serialWrite(self):
+        #Min/Max Limit
+        if self.control_input.speed > 20:
+            self.control_input.speed = 20
+
+        if self.control_input.brake > 200:
+            self.control_input.brake = 200
+
+        if self.control_input.steer > 27.7:
+            self.control_input.steer = 27.7
+        elif self.control_input.steer < -27.7:
+            self.control_input.steer = -27.7
+
+        ##########ARBIT CONTROL############
+        self.control_input.emergency_stop = 0
+        self.control_input.gear = 0
+        self.control_input.speed = 10
+        self.control_input.steer = 20
+        self.control_input.brake = 0
+        #####################################
+
+        result = struct.pack(
+            ">BBBBBBHhBBBB",
+            0x53,
+            0x54,
+            0x58,
+            1, #always auto
+            self.control_input.emergency_stop,
+            self.control_input.gear,
+            int(self.control_input.speed * 10),
+            int(self.control_input.steer * 71),
+            self.control_input.brake,
+            self.alive,
+            0x0D,
+            0x0A
+        )
+
+        self.ser.write(result)
+
+
+    def controlCallback(self, msg):
+        self.control_input = msg
 
 if __name__ == "__main__":
     Activate_Signal_Interrupt_Handler()
-
     erp = Serial_IO()

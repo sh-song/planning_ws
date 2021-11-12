@@ -112,7 +112,6 @@ class Serial_Node:
             self.alive,
             0x0D,
             0x0A
-            
         )
 
         # print('speed is', self.control_input.speed * 10)
