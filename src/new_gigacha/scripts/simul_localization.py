@@ -12,7 +12,7 @@ from numpy import rad2deg
 class Localization():
     def __init__(self):
         rospy.init_node('Localization', anonymous=False)
-        self.pub = rospy.Publisher('/pose', Local, queue_size = 100)
+        self.pub = rospy.Publisher('/pose', Local, queue_size = 1)
         self.msg = Local()
 
         #Set
