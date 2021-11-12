@@ -2,7 +2,6 @@
 import serial #Serial USB
 import socket #UDP LAN
 import rospy
-# from new_gigacha.msg import Local
 import os
 import json
 import socket
@@ -113,10 +112,10 @@ class SimulIMU():
             # print(' ang_vel_x :{0}  ang_vel_y : {1}  ang_vel_z : {2} '.format(round(self.imu_parser.parsed_data[4],2),round(self.imu_parser.parsed_data[5],2),round(self.imu_parser.parsed_data[6],2)))
             # print(' lin_acc_x :{0}  lin_acc_y : {1}  lin_acc_z : {2} '.format(round(self.imu_parser.parsed_data[7],2),round(self.imu_parser.parsed_data[8],2),round(self.imu_parser.parsed_data[9],2)))
 
-            self.msg.orientation.w = round(self.imu_parser.parsed_data[0],4)
-            self.msg.orientation.x = round(self.imu_parser.parsed_data[1],4)
-            self.msg.orientation.y = round(self.imu_parser.parsed_data[2],4)
-            self.msg.orientation.z = round(self.imu_parser.parsed_data[3],4)
+            self.msg.orientation.w = self.imu_parser.parsed_data[0]
+            self.msg.orientation.x = self.imu_parser.parsed_data[1]
+            self.msg.orientation.y = self.imu_parser.parsed_data[2]
+            self.msg.orientation.z = self.imu_parser.parsed_data[3]
 
             self.pub.publish(self.msg)
 

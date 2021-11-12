@@ -2,14 +2,17 @@
 import serial #Serial USB
 import socket #UDP LAN
 import rospy
-from nav_msgs.msg import Odometry
+from geometry_msgs.msg import Pose
+from new_gigacha.msg import Local
+from tf.transformations import euler_from_quaternion
 import pymap3d
+from numpy import rad2deg
 
 
 class Localization():
     def __init__(self):
         rospy.init_node('Localization', anonymous=False)
-        self.pub = rospy.Publisher('/pose', Local, queue_size = 1)
+        self.pub = rospy.Publisher('/pose', Local, queue_size = 100)
         self.msg = Local()
 
         #Set
@@ -17,40 +20,28 @@ class Localization():
         self.lon_origin = 126.773156667
         self.alt_origin = 15.400
 
-        self. x = 0
-        self. y = 0
-        self. yaw = 0
+        rospy.Subscriber("/simul_gps", Pose, self.gpsCallback)
+        rospy.Subscriber("/simul_imu", Pose, self.imuCallback)
 
-        rospy.Subscriber("/simul_gps", Local, self.gpsCallback)
-        rospy.Subscriber("/simul_imu", Local, self.imuCallback)
 
-        rospy
     def main(self):
-
-
-        self.msg.x = x
-        self.msg.y = y
-
-        self.pub.publish(msg)
+        self.pub.publish(self.msg)
 
 
     def gpsCallback(self, data):
-        self.msg.x, self.msg.y, _ = pymap3d.geodetic2enu(data.x, data.y, self.alt_origin, \
+        self.msg.x, self.msg.y, _ = pymap3d.geodetic2enu(data.position.x, data.position.y, self.alt_origin, \
                                             self.lat_origin , self.lon_origin, self.alt_origin)
 
-
     def imuCallback(self, data):
-        self.msg.heading = data.heading
-
+        ori = [data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w] 
+        roll, pitch, yaw = euler_from_quaternion(ori)
+        self.msg.heading = rad2deg(yaw) % 360 #East = 0, North = 90, West = 180, South = 270 deg 
 
     
 if __name__ == '__main__':
     
     loc = Localization()
-    rate = rospy.Rate(1000)
- 
-    loc.connect()
-    print("dd")
+    rate = rospy.Rate(50)
  
     while not rospy.is_shutdown():
 
