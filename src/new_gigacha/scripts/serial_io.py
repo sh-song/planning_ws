@@ -1,5 +1,5 @@
 
-from utils.sig_int_handler import Activate_Signal_Interrupt_Handler
+from lib.general_utils.sig_int_handler import Activate_Signal_Interrupt_Handler
 import serial
 from new_gigacha.msg import Serial_Info
 from new_gigacha.msg import Control_Info
