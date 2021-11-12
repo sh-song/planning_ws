@@ -13,8 +13,8 @@
             "lidar_host_port" : 2369,
             "lidar_dst_port" : 2368,
 
-            "gps_host_port" : 1233,
-            "gps_dst_port" : 1234,
+            "gps_host_port" : 9090,
+            "gps_dst_port" : 9091,
 
             "imu_host_port" : 1235,
             "imu_dst_port" : 1236,

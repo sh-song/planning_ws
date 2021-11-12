@@ -72,7 +72,7 @@ class Localization():
 if __name__ == '__main__':
     
     loc = Localization()
-    rate = rospy.Rate(1000)
+    rate = rospy.Rate(10006)
  
     loc.connect()
     print("dd")
