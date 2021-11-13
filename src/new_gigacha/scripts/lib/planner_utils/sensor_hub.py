@@ -10,6 +10,7 @@ class SensorHub:
 
     def localCallback(self, msg):
         self.ego.pose = msg
+        print('====asdf===')
 
     def serialCallback(self, msg):
         self.ego.speed = msg.speed

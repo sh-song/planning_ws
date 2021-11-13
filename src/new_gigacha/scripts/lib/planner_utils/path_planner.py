@@ -15,3 +15,12 @@ class PathPlanner:
 
         except rospy.ServiceException as e:
                 print(f"Service call failed: {e}")
+
+
+    def run(self):
+        if self.ego.state == "LPP":
+            #LPP
+            pass
+        else:
+            pass
+            #GPP
