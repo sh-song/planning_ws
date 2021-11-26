@@ -12,10 +12,12 @@ class Serial_IO:
     def __init__(self):
         # Serial Connect
         self.ser = serial.Serial("/dev/ttyUSB0", 115200)
+        print("Serial_IO: Serial connecting to /dev/ttyUSB0...")
 
         # ROS Publish
         rospy.init_node("Serial_IO", anonymous=False)
         self.serial_pub = rospy.Publisher("/serial", Serial_Info, queue_size=1)
+        print("Serial_IO: Initializing ROS node...")
 
 
         # Messages/Data
@@ -39,7 +41,12 @@ class Serial_IO:
 
 
     def serialRead(self):
+        print("Serial_IO: Serial reading thread successfully started")
+
         while True:
+
+            print(f"Serial_IO: Reading serial {self.alive}")
+
             packet = self.ser.read_until(b'\x0d\x0a')
             if len(packet) == 18:
                 header = packet[0:3].decode()
@@ -85,7 +92,7 @@ class Serial_IO:
         self.control_input.emergency_stop = 0
         self.control_input.gear = 0
         self.control_input.speed = 10
-        self.control_input.steer = 20
+        self.control_input.steer = 0
         self.control_input.brake = 0
         #####################################
 
