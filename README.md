@@ -18,7 +18,8 @@
 3. $python3 serial_io.py
 4. $python3 planner.py
 5. $python3 serial_io.py
-6. $rviz -d rviz_config.rviz
+6. $python3 env_visualizer.py
+7. $rviz -d rviz_config.rviz
 
 ## 뭘 할 수 있나요?
 1. 라이다, 카메라 안쓰는 모든 것 가능.
