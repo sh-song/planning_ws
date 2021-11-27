@@ -38,6 +38,8 @@ class Visualizer:
             for i in range(len(self.ego.global_path.x)):
                 self.vis_global_path.points.append(Point32(self.ego.global_path.x[i], self.ego.global_path.y[i], 0))
                 self.vis_global_path.header.stamp = rospy.Time.now()
+
+        
         self.global_path_pub.publish(self.vis_global_path)
 
         self.pose.points = []

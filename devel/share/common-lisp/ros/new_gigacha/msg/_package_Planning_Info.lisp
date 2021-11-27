@@ -3,6 +3,8 @@
           MODE
           LOCAL-VAL
           LOCAL
+          INDEX-VAL
+          INDEX
           PATH_X-VAL
           PATH_X
           PATH_Y-VAL

@@ -101,40 +101,40 @@ class Mapping:
             else:
                 self.obs_map[id].cnt += 1
 
-def make_target_map(self, ego):
-        target_map = {}
+    def make_target_map(self, ego):
+            target_map = {}
 
-        for i, obstacle in self.obs_map.items():
-            dist = obstacle.dist
-            index = obstacle.index
-            emapos = obstacle.EMA.retAvg()
+            for i, obstacle in self.obs_map.items():
+                dist = obstacle.dist
+                index = obstacle.index
+                emapos = obstacle.EMA.retAvg()
 
-            std_point = Point32(ego.global_path.x[index], ego.global_path.y[index], 0)
-            if dist > 1.75:
-                continue
+                std_point = Point32(ego.global_path.x[index], ego.global_path.y[index], 0)
+                if dist > 1.75:
+                    continue
 
-            # 경로와 가까울때는 최대 2정도의 거리만큼 떨어져서 주행
-            # 경로와 멀때는 거의 0에 가까운 거리만큼 떨어져서 주행
+                # 경로와 가까울때는 최대 2정도의 거리만큼 떨어져서 주행
+                # 경로와 멀때는 거의 0에 가까운 거리만큼 떨어져서 주행
 
-            rad = np.arctan2(emapos.y - std_point.y, emapos.x - std_point.x)
-            crossP = ego.global_path.x[index] * emapos.y - ego.global_path.y[index] * emapos.x
-            # 왼쪽에 있는데, 경로 가까이 있으면
-            if crossP > 0 and dist < 0.5:
-                r = dist + 1.25
-            else:
-                rad += pi
-                r = max(0, -dist + 1.25)
+                rad = np.arctan2(emapos.y - std_point.y, emapos.x - std_point.x)
+                crossP = ego.global_path.x[index] * emapos.y - ego.global_path.y[index] * emapos.x
+                # 왼쪽에 있는데, 경로 가까이 있으면
+                if crossP > 0 and dist < 0.5:
+                    r = dist + 1.25
+                else:
+                    rad += pi
+                    r = max(0, -dist + 1.25)
 
-            if obstacle.rad != None:
-                if abs(rad - obstacle.rad) > pi / 2:
-                    rad = obstacle.rad
-            else:
-                obstacle.rad = rad
-            point = Point32()
-            point.x = std_point.x + (r * cos(rad))
-            point.y = std_point.y + (r * sin(rad))
-            target_map[index] = point
-        return target_map
+                if obstacle.rad != None:
+                    if abs(rad - obstacle.rad) > pi / 2:
+                        rad = obstacle.rad
+                else:
+                    obstacle.rad = rad
+                point = Point32()
+                point.x = std_point.x + (r * cos(rad))
+                point.y = std_point.y + (r * sin(rad))
+                target_map[index] = point
+            return target_map
                 
 
     # 현재 map에 저장되어있는 모든 point를 PointCloud형식으로 바꿔서 리턴하는 함수

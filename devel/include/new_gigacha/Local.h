@@ -15,6 +15,7 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
+#include <std_msgs/Header.h>
 
 namespace new_gigacha
 {
@@ -24,18 +25,23 @@ struct Local_
   typedef Local_<ContainerAllocator> Type;
 
   Local_()
-    : x(0.0)
+    : header()
+    , x(0.0)
     , y(0.0)
     , heading(0.0)  {
     }
   Local_(const ContainerAllocator& _alloc)
-    : x(0.0)
+    : header(_alloc)
+    , x(0.0)
     , y(0.0)
     , heading(0.0)  {
   (void)_alloc;
     }
 
 
+
+   typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
+  _header_type header;
 
    typedef double _x_type;
   _x_type x;
@@ -75,7 +81,8 @@ return s;
 template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::new_gigacha::Local_<ContainerAllocator1> & lhs, const ::new_gigacha::Local_<ContainerAllocator2> & rhs)
 {
-  return lhs.x == rhs.x &&
+  return lhs.header == rhs.header &&
+    lhs.x == rhs.x &&
     lhs.y == rhs.y &&
     lhs.heading == rhs.heading;
 }
@@ -110,22 +117,22 @@ struct IsMessage< ::new_gigacha::Local_<ContainerAllocator> const>
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::new_gigacha::Local_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::new_gigacha::Local_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct HasHeader< ::new_gigacha::Local_<ContainerAllocator> >
-  : FalseType
+  : TrueType
   { };
 
 template <class ContainerAllocator>
 struct HasHeader< ::new_gigacha::Local_<ContainerAllocator> const>
-  : FalseType
+  : TrueType
   { };
 
 
@@ -134,12 +141,12 @@ struct MD5Sum< ::new_gigacha::Local_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "bc1dd36b5547fef69e6daa06ae2e13ac";
+    return "f82b3807856f3b309240aed4ced2adb2";
   }
 
   static const char* value(const ::new_gigacha::Local_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xbc1dd36b5547fef6ULL;
-  static const uint64_t static_value2 = 0x9e6daa06ae2e13acULL;
+  static const uint64_t static_value1 = 0xf82b3807856f3b30ULL;
+  static const uint64_t static_value2 = 0x9240aed4ced2adb2ULL;
 };
 
 template<class ContainerAllocator>
@@ -158,9 +165,26 @@ struct Definition< ::new_gigacha::Local_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "float64 x\n"
+    return "Header header\n"
+"\n"
+"float64 x\n"
 "float64 y\n"
 "float64 heading\n"
+"================================================================================\n"
+"MSG: std_msgs/Header\n"
+"# Standard metadata for higher-level stamped data types.\n"
+"# This is generally used to communicate timestamped data \n"
+"# in a particular coordinate frame.\n"
+"# \n"
+"# sequence ID: consecutively increasing ID \n"
+"uint32 seq\n"
+"#Two-integer timestamp that is expressed as:\n"
+"# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')\n"
+"# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')\n"
+"# time-handling sugar is provided by the client library\n"
+"time stamp\n"
+"#Frame this data is associated with\n"
+"string frame_id\n"
 ;
   }
 
@@ -179,6 +203,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
+      stream.next(m.header);
       stream.next(m.x);
       stream.next(m.y);
       stream.next(m.heading);
@@ -200,6 +225,9 @@ struct Printer< ::new_gigacha::Local_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::new_gigacha::Local_<ContainerAllocator>& v)
   {
+    s << indent << "header: ";
+    s << std::endl;
+    Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
     s << indent << "x: ";
     Printer<double>::stream(s, indent + "  ", v.x);
     s << indent << "y: ";

@@ -16,13 +16,14 @@
 
 (defclass new_gigacha::Planning_Info
   :super ros::object
-  :slots (_mode _local _path_x _path_y _path_heading _path_local_x _path_local_y _point ))
+  :slots (_mode _local _index _path_x _path_y _path_heading _path_local_x _path_local_y _point ))
 
 (defmethod new_gigacha::Planning_Info
   (:init
    (&key
     ((:mode __mode) "")
     ((:local __local) (instance new_gigacha::Local :init))
+    ((:index __index) 0)
     ((:path_x __path_x) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:path_y __path_y) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:path_heading __path_heading) (make-array 0 :initial-element 0.0 :element-type :float))
@@ -33,6 +34,7 @@
    (send-super :init)
    (setq _mode (string __mode))
    (setq _local __local)
+   (setq _index (round __index))
    (setq _path_x __path_x)
    (setq _path_y __path_y)
    (setq _path_heading __path_heading)
@@ -50,6 +52,9 @@
      (progn
        (if __local (setq _local (car __local)))
        _local)))
+  (:index
+   (&optional __index)
+   (if __index (setq _index __index)) _index)
   (:path_x
    (&optional __path_x)
    (if __path_x (setq _path_x __path_x)) _path_x)
@@ -79,6 +84,8 @@
     4 (length _mode)
     ;; new_gigacha/Local _local
     (send _local :serialization-length)
+    ;; int16 _index
+    2
     ;; float64[] _path_x
     (* 8    (length _path_x)) 4
     ;; float64[] _path_y
@@ -100,6 +107,8 @@
        (write-long (length _mode) s) (princ _mode s)
      ;; new_gigacha/Local _local
        (send _local :serialize s)
+     ;; int16 _index
+       (write-word _index s)
      ;; float64[] _path_x
      (write-long (length _path_x) s)
      (dotimes (i (length _path_x))
@@ -135,6 +144,8 @@
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _mode (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; new_gigacha/Local _local
      (send _local :deserialize buf ptr-) (incf ptr- (send _local :serialization-length))
+   ;; int16 _index
+     (setq _index (sys::peek buf ptr- :short)) (incf ptr- 2)
    ;; float64[] _path_x
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
@@ -176,11 +187,12 @@
    self)
   )
 
-(setf (get new_gigacha::Planning_Info :md5sum-) "ca3fd13cb64cf71fd7e0db5debcdd949")
+(setf (get new_gigacha::Planning_Info :md5sum-) "c4d20caaea3ca6d27e075a2a5f2e1296")
 (setf (get new_gigacha::Planning_Info :datatype-) "new_gigacha/Planning_Info")
 (setf (get new_gigacha::Planning_Info :definition-)
       "string mode
 Local local
+int16 index
 float64[] path_x
 float64[] path_y
 float64[] path_heading
@@ -191,9 +203,27 @@ geometry_msgs/Point32 point
 
 ================================================================================
 MSG: new_gigacha/Local
+Header header
+
 float64 x
 float64 y
 float64 heading
+================================================================================
+MSG: std_msgs/Header
+# Standard metadata for higher-level stamped data types.
+# This is generally used to communicate timestamped data 
+# in a particular coordinate frame.
+# 
+# sequence ID: consecutively increasing ID 
+uint32 seq
+#Two-integer timestamp that is expressed as:
+# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
+# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
+# time-handling sugar is provided by the client library
+time stamp
+#Frame this data is associated with
+string frame_id
+
 ================================================================================
 MSG: geometry_msgs/Point32
 # This contains the position of a point in free space(with 32 bits of precision).
@@ -211,6 +241,6 @@ float32 z
 
 
 
-(provide :new_gigacha/Planning_Info "ca3fd13cb64cf71fd7e0db5debcdd949")
+(provide :new_gigacha/Planning_Info "c4d20caaea3ca6d27e075a2a5f2e1296")
 
 

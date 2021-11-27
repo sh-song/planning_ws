@@ -83,18 +83,6 @@ class Serial_IO:
         if self.control_input.brake > 200:
             self.control_input.brake = 200
 
-        if self.control_input.steer > 27.7:
-            self.control_input.steer = 27.7
-        elif self.control_input.steer < -27.7:
-            self.control_input.steer = -27.7
-
-        ##########ARBIT CONTROL############
-        self.control_input.emergency_stop = 0
-        self.control_input.gear = 0
-        self.control_input.speed = 10
-        self.control_input.steer = 0
-        self.control_input.brake = 0
-        #####################################
 
         result = struct.pack(
             ">BBBBBBHhBBBB",

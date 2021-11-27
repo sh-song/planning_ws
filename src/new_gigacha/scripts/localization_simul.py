@@ -25,6 +25,7 @@ class Localization():
     def main(self):
         self.msg.header.stamp = rospy.Time.now()
         self.pub.publish(self.msg)
+        print("Localization is on...")
 
 
     def gpsCallback(self, data):
@@ -45,3 +46,4 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
 
         loc.main()
+        rate.sleep()

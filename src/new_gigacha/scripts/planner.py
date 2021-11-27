@@ -28,14 +28,22 @@ class Planner:
         self.planning_pub = rospy.Publisher("/planner", Planning_Info, queue_size=1)
         self.planning_msg = Planning_Info()
 
+    def publish_planning_info(self):
+        self.planning_msg.index = self.ego.index
+        self.planning_msg.mode = self.ego.mode
+        self.planning_msg.local = self.ego.pose
+        self.planning_pub.publish(self.planning_msg)
+
+
     def run(self):
         # print(self.ego.obs_map)
         self.whereami.run()
         self.mission_planner.run()
         self.path_planner.run()
-        self.planning_msg.mode = self.ego.mode
-        self.planning_msg.local = self.ego.pose
-        self.planning_pub.publish(self.planning_msg)
+
+
+        self.publish_planning_info()
+
         self.visualizer.run()
         print(self.ego.index)
 

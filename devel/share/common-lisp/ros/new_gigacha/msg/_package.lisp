@@ -1,6 +1,10 @@
 (cl:defpackage new_gigacha-msg
   (:use )
   (:export
+   "<CIRCLEOBSTACLE>"
+   "CIRCLEOBSTACLE"
+   "<CIRCLEOBSTACLE>"
+   "CIRCLEOBSTACLE"
    "<CONTROL_INFO>"
    "CONTROL_INFO"
    "<CONTROL_INFO>"
@@ -9,6 +13,10 @@
    "LOCAL"
    "<LOCAL>"
    "LOCAL"
+   "<OBSTACLES>"
+   "OBSTACLES"
+   "<OBSTACLES>"
+   "OBSTACLES"
    "<PATH>"
    "PATH"
    "<PATH>"
@@ -17,6 +25,10 @@
    "PLANNING_INFO"
    "<PLANNING_INFO>"
    "PLANNING_INFO"
+   "<SEGMENTOBSTACLE>"
+   "SEGMENTOBSTACLE"
+   "<SEGMENTOBSTACLE>"
+   "SEGMENTOBSTACLE"
    "<SERIAL_INFO>"
    "SERIAL_INFO"
    "<SERIAL_INFO>"

@@ -28,6 +28,7 @@ struct Planning_Info_
   Planning_Info_()
     : mode()
     , local()
+    , index(0)
     , path_x()
     , path_y()
     , path_heading()
@@ -38,6 +39,7 @@ struct Planning_Info_
   Planning_Info_(const ContainerAllocator& _alloc)
     : mode(_alloc)
     , local(_alloc)
+    , index(0)
     , path_x(_alloc)
     , path_y(_alloc)
     , path_heading(_alloc)
@@ -54,6 +56,9 @@ struct Planning_Info_
 
    typedef  ::new_gigacha::Local_<ContainerAllocator>  _local_type;
   _local_type local;
+
+   typedef int16_t _index_type;
+  _index_type index;
 
    typedef std::vector<double, typename ContainerAllocator::template rebind<double>::other >  _path_x_type;
   _path_x_type path_x;
@@ -104,6 +109,7 @@ bool operator==(const ::new_gigacha::Planning_Info_<ContainerAllocator1> & lhs, 
 {
   return lhs.mode == rhs.mode &&
     lhs.local == rhs.local &&
+    lhs.index == rhs.index &&
     lhs.path_x == rhs.path_x &&
     lhs.path_y == rhs.path_y &&
     lhs.path_heading == rhs.path_heading &&
@@ -166,12 +172,12 @@ struct MD5Sum< ::new_gigacha::Planning_Info_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "ca3fd13cb64cf71fd7e0db5debcdd949";
+    return "c4d20caaea3ca6d27e075a2a5f2e1296";
   }
 
   static const char* value(const ::new_gigacha::Planning_Info_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xca3fd13cb64cf71fULL;
-  static const uint64_t static_value2 = 0xd7e0db5debcdd949ULL;
+  static const uint64_t static_value1 = 0xc4d20caaea3ca6d2ULL;
+  static const uint64_t static_value2 = 0x7e075a2a5f2e1296ULL;
 };
 
 template<class ContainerAllocator>
@@ -192,6 +198,7 @@ struct Definition< ::new_gigacha::Planning_Info_<ContainerAllocator> >
   {
     return "string mode\n"
 "Local local\n"
+"int16 index\n"
 "float64[] path_x\n"
 "float64[] path_y\n"
 "float64[] path_heading\n"
@@ -202,9 +209,27 @@ struct Definition< ::new_gigacha::Planning_Info_<ContainerAllocator> >
 "\n"
 "================================================================================\n"
 "MSG: new_gigacha/Local\n"
+"Header header\n"
+"\n"
 "float64 x\n"
 "float64 y\n"
 "float64 heading\n"
+"================================================================================\n"
+"MSG: std_msgs/Header\n"
+"# Standard metadata for higher-level stamped data types.\n"
+"# This is generally used to communicate timestamped data \n"
+"# in a particular coordinate frame.\n"
+"# \n"
+"# sequence ID: consecutively increasing ID \n"
+"uint32 seq\n"
+"#Two-integer timestamp that is expressed as:\n"
+"# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')\n"
+"# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')\n"
+"# time-handling sugar is provided by the client library\n"
+"time stamp\n"
+"#Frame this data is associated with\n"
+"string frame_id\n"
+"\n"
 "================================================================================\n"
 "MSG: geometry_msgs/Point32\n"
 "# This contains the position of a point in free space(with 32 bits of precision).\n"
@@ -238,6 +263,7 @@ namespace serialization
     {
       stream.next(m.mode);
       stream.next(m.local);
+      stream.next(m.index);
       stream.next(m.path_x);
       stream.next(m.path_y);
       stream.next(m.path_heading);
@@ -267,6 +293,8 @@ struct Printer< ::new_gigacha::Planning_Info_<ContainerAllocator> >
     s << indent << "local: ";
     s << std::endl;
     Printer< ::new_gigacha::Local_<ContainerAllocator> >::stream(s, indent + "  ", v.local);
+    s << indent << "index: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.index);
     s << indent << "path_x[]" << std::endl;
     for (size_t i = 0; i < v.path_x.size(); ++i)
     {

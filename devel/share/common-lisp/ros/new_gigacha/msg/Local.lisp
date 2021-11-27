@@ -7,7 +7,12 @@
 ;//! \htmlinclude Local.msg.html
 
 (cl:defclass <Local> (roslisp-msg-protocol:ros-message)
-  ((x
+  ((header
+    :reader header
+    :initarg :header
+    :type std_msgs-msg:Header
+    :initform (cl:make-instance 'std_msgs-msg:Header))
+   (x
     :reader x
     :initarg :x
     :type cl:float
@@ -32,6 +37,11 @@
   (cl:unless (cl:typep m 'Local)
     (roslisp-msg-protocol:msg-deprecation-warning "using old message class name new_gigacha-msg:<Local> is deprecated: use new_gigacha-msg:Local instead.")))
 
+(cl:ensure-generic-function 'header-val :lambda-list '(m))
+(cl:defmethod header-val ((m <Local>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader new_gigacha-msg:header-val is deprecated.  Use new_gigacha-msg:header instead.")
+  (header m))
+
 (cl:ensure-generic-function 'x-val :lambda-list '(m))
 (cl:defmethod x-val ((m <Local>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader new_gigacha-msg:x-val is deprecated.  Use new_gigacha-msg:x instead.")
@@ -48,6 +58,7 @@
   (heading m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <Local>) ostream)
   "Serializes a message object of type '<Local>"
+  (roslisp-msg-protocol:serialize (cl:slot-value msg 'header) ostream)
   (cl:let ((bits (roslisp-utils:encode-double-float-bits (cl:slot-value msg 'x))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
@@ -78,6 +89,7 @@
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <Local>) istream)
   "Deserializes a message object of type '<Local>"
+  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'header) istream)
     (cl:let ((bits 0))
       (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
@@ -118,18 +130,19 @@
   "new_gigacha/Local")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<Local>)))
   "Returns md5sum for a message object of type '<Local>"
-  "bc1dd36b5547fef69e6daa06ae2e13ac")
+  "f82b3807856f3b309240aed4ced2adb2")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'Local)))
   "Returns md5sum for a message object of type 'Local"
-  "bc1dd36b5547fef69e6daa06ae2e13ac")
+  "f82b3807856f3b309240aed4ced2adb2")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<Local>)))
   "Returns full string definition for message of type '<Local>"
-  (cl:format cl:nil "float64 x~%float64 y~%float64 heading~%~%"))
+  (cl:format cl:nil "Header header~%~%float64 x~%float64 y~%float64 heading~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'Local)))
   "Returns full string definition for message of type 'Local"
-  (cl:format cl:nil "float64 x~%float64 y~%float64 heading~%~%"))
+  (cl:format cl:nil "Header header~%~%float64 x~%float64 y~%float64 heading~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <Local>))
   (cl:+ 0
+     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'header))
      8
      8
      8
@@ -137,6 +150,7 @@
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <Local>))
   "Converts a ROS message object to a list"
   (cl:list 'Local
+    (cl:cons ':header (header msg))
     (cl:cons ':x (x msg))
     (cl:cons ':y (y msg))
     (cl:cons ':heading (heading msg))

@@ -22,6 +22,7 @@ class Planning_Info {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.mode = null;
       this.local = null;
+      this.index = null;
       this.path_x = null;
       this.path_y = null;
       this.path_heading = null;
@@ -41,6 +42,12 @@ class Planning_Info {
       }
       else {
         this.local = new Local();
+      }
+      if (initObj.hasOwnProperty('index')) {
+        this.index = initObj.index
+      }
+      else {
+        this.index = 0;
       }
       if (initObj.hasOwnProperty('path_x')) {
         this.path_x = initObj.path_x
@@ -87,6 +94,8 @@ class Planning_Info {
     bufferOffset = _serializer.string(obj.mode, buffer, bufferOffset);
     // Serialize message field [local]
     bufferOffset = Local.serialize(obj.local, buffer, bufferOffset);
+    // Serialize message field [index]
+    bufferOffset = _serializer.int16(obj.index, buffer, bufferOffset);
     // Serialize message field [path_x]
     bufferOffset = _arraySerializer.float64(obj.path_x, buffer, bufferOffset, null);
     // Serialize message field [path_y]
@@ -110,6 +119,8 @@ class Planning_Info {
     data.mode = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [local]
     data.local = Local.deserialize(buffer, bufferOffset);
+    // Deserialize message field [index]
+    data.index = _deserializer.int16(buffer, bufferOffset);
     // Deserialize message field [path_x]
     data.path_x = _arrayDeserializer.float64(buffer, bufferOffset, null)
     // Deserialize message field [path_y]
@@ -128,12 +139,13 @@ class Planning_Info {
   static getMessageSize(object) {
     let length = 0;
     length += _getByteLength(object.mode);
+    length += Local.getMessageSize(object.local);
     length += 8 * object.path_x.length;
     length += 8 * object.path_y.length;
     length += 8 * object.path_heading.length;
     length += 8 * object.path_local_x.length;
     length += 8 * object.path_local_y.length;
-    return length + 60;
+    return length + 38;
   }
 
   static datatype() {
@@ -143,7 +155,7 @@ class Planning_Info {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'ca3fd13cb64cf71fd7e0db5debcdd949';
+    return 'c4d20caaea3ca6d27e075a2a5f2e1296';
   }
 
   static messageDefinition() {
@@ -151,6 +163,7 @@ class Planning_Info {
     return `
     string mode
     Local local
+    int16 index
     float64[] path_x
     float64[] path_y
     float64[] path_heading
@@ -161,9 +174,27 @@ class Planning_Info {
     
     ================================================================================
     MSG: new_gigacha/Local
+    Header header
+    
     float64 x
     float64 y
     float64 heading
+    ================================================================================
+    MSG: std_msgs/Header
+    # Standard metadata for higher-level stamped data types.
+    # This is generally used to communicate timestamped data 
+    # in a particular coordinate frame.
+    # 
+    # sequence ID: consecutively increasing ID 
+    uint32 seq
+    #Two-integer timestamp that is expressed as:
+    # * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
+    # * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
+    # time-handling sugar is provided by the client library
+    time stamp
+    #Frame this data is associated with
+    string frame_id
+    
     ================================================================================
     MSG: geometry_msgs/Point32
     # This contains the position of a point in free space(with 32 bits of precision).
@@ -198,6 +229,13 @@ class Planning_Info {
     }
     else {
       resolved.local = new Local()
+    }
+
+    if (msg.index !== undefined) {
+      resolved.index = msg.index;
+    }
+    else {
+      resolved.index = 0
     }
 
     if (msg.path_x !== undefined) {

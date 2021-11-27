@@ -136,5 +136,6 @@ if __name__ == '__main__':
     imu = SimulIMU(host_ip, imu_port)
 
     while not rospy.is_shutdown():
+        print("Simul sensors are on...")
         gps.main()
         imu.main()

@@ -1,5 +1,4 @@
 import rospy
-from lib.general_utils.hybrid_a_star import path_plan as lpp
 
 class PathPlanner:
     def __init__(self, ego):
