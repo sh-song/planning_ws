@@ -10,7 +10,6 @@ class PID:
 
     def run(self, current, target):
         error = target - current
-        print(f"error: {current}")
         diff_error = error - self.pre_error
         self.pre_error = error
         self.error_sum += error

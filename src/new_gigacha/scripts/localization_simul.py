@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, PoseStamped
 from new_gigacha.msg import Local
 from tf.transformations import euler_from_quaternion
 import pymap3d
@@ -13,6 +13,11 @@ class Localization():
         self.pub = rospy.Publisher('/pose', Local, queue_size = 1)
         self.msg = Local()
 
+        #Visualization
+        self.vis_pub = rospy.Publisher('/vis_pose', PoseStamped, queue_size=1)
+        self.vis_msg = PoseStamped()
+        self.vis_msg.header.frame_id = "map"
+        
         #Set
         self.lat_origin = 37.239231667
         self.lon_origin = 126.773156667
@@ -23,8 +28,11 @@ class Localization():
 
 
     def main(self):
-        self.msg.header.stamp = rospy.Time.now()
         self.pub.publish(self.msg)
+        self.vis_msg.pose.position.x = self.msg.x
+        self.vis_msg.pose.position.y = self.msg.y
+        self.vis_msg.header.stamp = rospy.Time.now()
+        self.vis_pub.publish(self.vis_msg)
         print("Localization is on...")
 
 
@@ -33,9 +41,11 @@ class Localization():
                                             self.lat_origin , self.lon_origin, self.alt_origin)
 
     def imuCallback(self, data):
+        self.vis_msg.pose.orientation = data.orientation
         ori = [data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w] 
         roll, pitch, yaw = euler_from_quaternion(ori)
         self.msg.heading = rad2deg(yaw) % 360 #East = 0, North = 90, West = 180, South = 270 deg 
+
 
     
 if __name__ == '__main__':

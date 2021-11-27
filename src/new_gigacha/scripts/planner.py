@@ -3,7 +3,6 @@ from lib.planner_utils.mission_planner import MissionPlanner
 from lib.planner_utils.path_planner import PathPlanner
 from lib.planner_utils.index_finder import IndexFinder
 from lib.planner_utils.sensor_hub import SensorHub
-from lib.planner_utils.visualizer import Visualizer
 from lib.general_utils.read_global_path import read_global_path
 from lib.general_utils.ego import EgoVehicle
 
@@ -23,7 +22,6 @@ class Planner:
         self.path_planner = PathPlanner(self.ego)
         self.whereami = IndexFinder(self.ego)
         self.mission_planner = MissionPlanner(self.ego)
-        self.visualizer = Visualizer(self.ego)
    
         self.planning_pub = rospy.Publisher("/planner", Planning_Info, queue_size=1)
         self.planning_msg = Planning_Info()
@@ -44,7 +42,6 @@ class Planner:
 
         self.publish_planning_info()
 
-        self.visualizer.run()
         print(self.ego.index)
 
 

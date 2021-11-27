@@ -28,26 +28,34 @@ class Controller:
 
         self.lat_controller = PurePursuit(self.state, self.global_path, self.local_path) #return steering
         self.lon_controller = longitudinalController(self.state)
-    
-
-    
 
     def run(self):
-        rate = rospy.Rate(20)
-        while not rospy.is_shutdown():
+
+        if self.state.mode == "emergency_stop":            
+            self.control_msg.emergency_stop = 1
+
+        elif self.state.mode == "backward":
+            self.control_msg.emergency_stop = 0
+            self.control_msg.gear = 2
+            self.control_msg.steer = self.lat_controller.run()
+            self.control_msg.speed, self.control_msg.brake = self.lon_controller.run() 
+        
+        else:
             self.control_msg.emergency_stop = 0
             self.control_msg.gear = 0
             self.control_msg.steer = self.lat_controller.run()
             self.control_msg.speed, self.control_msg.brake = self.lon_controller.run() 
-            self.control_pub.publish(self.control_msg)
-            print(self.control_msg)
-            rate.sleep()
+            
+        self.control_pub.publish(self.control_msg)
+        print(self.control_msg)
+
 
     
 if __name__ == "__main__":
+    
     Activate_Signal_Interrupt_Handler()
     cc = Controller()
     rate = rospy.Rate(20)
-    while True:
+    while not rospy.is_shutdown():
         cc.run()
         rate.sleep()
