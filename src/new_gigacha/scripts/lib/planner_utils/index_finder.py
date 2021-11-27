@@ -8,7 +8,8 @@ class IndexFinder:
         min_dis = -1
         min_idx = 0
         print(len(self.ego.global_path.x))
-        for i in range(max(self.ego.index - 3, 0), self.ego.index + 3):
+        step_size = 100
+        for i in range(max(self.ego.index - step_size, 0), self.ego.index + step_size):
             dis = hypot(self.ego.global_path.x[i] - self.ego.pose.x, self.ego.global_path.y[i] - self.ego.pose.y)
             if min_dis > dis or min_dis == -1:
                 min_dis = dis
