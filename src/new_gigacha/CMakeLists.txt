@@ -55,6 +55,9 @@ add_message_files(
   Serial_Info.msg
   Path.msg
   Local.msg
+  CircleObstacle.msg
+  Obstacles.msg
+  SegmentObstacle.msg
 )
 
 ## Generate services in the 'srv' folder

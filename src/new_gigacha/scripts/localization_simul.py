@@ -23,6 +23,7 @@ class Localization():
 
 
     def main(self):
+        self.msg.header.stamp = rospy.Time.now()
         self.pub.publish(self.msg)
 
 

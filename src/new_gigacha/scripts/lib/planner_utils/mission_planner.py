@@ -8,7 +8,7 @@ class MissionPlanner:
         #Mission Decision
         if self.ego.state is "Ready":
             self.ego.mission=self.ego.global_path.mission[self.ego.index]
-            self.ego.mode = "general"
+            self.ego.mode = "small"
 
         #     if not self.ego.mission == "":
         #         print(f"========Mission {self.ego.mission} Start")
