@@ -32,24 +32,23 @@ class Controller:
     def run(self):
 
         if self.state.mode == "emergency_stop":            
-            self.control_msg.emergency_stop = 1
+            self.publish_control_info(1, 2)
 
         elif self.state.mode == "backward":
-            self.control_msg.emergency_stop = 0
-            self.control_msg.gear = 2
-            self.control_msg.steer = self.lat_controller.run()
-            self.control_msg.speed, self.control_msg.brake = self.lon_controller.run() 
-        
-        else:
-            self.control_msg.emergency_stop = 0
-            self.control_msg.gear = 0
-            self.control_msg.steer = self.lat_controller.run()
-            self.control_msg.speed, self.control_msg.brake = self.lon_controller.run() 
+            self.publish_control_info(0, 2)
             
-        self.control_pub.publish(self.control_msg)
+        else:
+            self.publish_control_info(0, 0)
+            
+
         print(self.control_msg)
 
-
+    def publish_control_info(self, estop, gear):
+            self.control_msg.emergency_stop = estop
+            self.control_msg.gear = gear
+            self.control_msg.steer = self.lat_controller.run()
+            self.control_msg.speed, self.control_msg.brake = self.lon_controller.run()   
+            self.control_pub.publish(self.control_msg)
     
 if __name__ == "__main__":
     
