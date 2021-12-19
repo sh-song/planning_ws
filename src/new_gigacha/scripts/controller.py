@@ -56,7 +56,7 @@ class Controller:
             if self.curve_check > 20 :
                 self.state.target_speed = 10.0 - abs(self.curve_check)/10
             else :
-                self.state.target_speed = 10.0
+                self.state.target_speed = 15.0
 
         print(self.control_msg)
         # velocity = self.state.target_speed, self.state.speed
