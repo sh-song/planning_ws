@@ -26,7 +26,7 @@ class Controller:
         self.update_state = stateUpdater(self.state)
         # self.update_local_path = pathUpdater(self.local_path)
 
-        self.state.target_speed = 10.0 #TODO: decided by mission or map
+        self.state.target_speed = 2.0 #TODO: decided by mission or map
 
         
 
@@ -54,9 +54,9 @@ class Controller:
         else:
             self.publish_control_info(0, 0)
             if self.curve_check > 20 :
-                self.state.target_speed = 6.0 - abs(self.curve_check)/10
+                self.state.target_speed = 10.0 - abs(self.curve_check)/10
             else :
-                self.state.target_speed = 6.0
+                self.state.target_speed = 10.0
 
         print(self.control_msg)
         # velocity = self.state.target_speed, self.state.speed

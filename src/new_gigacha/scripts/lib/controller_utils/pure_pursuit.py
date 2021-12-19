@@ -9,11 +9,10 @@ class PurePursuit:
         self.state = state
         self.global_path = global_path
         self.local_path = local_path
-    
+        
 
     def run(self):
        
-
         if self.state.mode == "local path tracking":
             path = self.local_path
         else:
@@ -29,11 +28,8 @@ class PurePursuit:
         print(f"target_index : {target_index}")
         tmp = degrees(atan2(target_y - self.state.y, target_x - self.state.x)) % 360
 
-        # if self.state.mode == "backward" :
-        #     self.state.heading = (self.state.heading + 180) % 360
-
-        # self.state.heading = (self.state.heading + 260) % 360
-        
+        if self.state.mode == "backward" :
+            self.state.heading = (self.state.heading + 180) % 360        
     
         alpha = self.state.heading - tmp
         angle = atan2(2.0 * self.WB * sin(radians(alpha)) / lookahead, 1.0)

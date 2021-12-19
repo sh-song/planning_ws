@@ -89,7 +89,6 @@ class Serial_IO:
         if self.control_input.brake > 200:
             self.control_input.brake = 200
 
-
         result = struct.pack(
             ">BBBBBBHhBBBB",
             0x53,
