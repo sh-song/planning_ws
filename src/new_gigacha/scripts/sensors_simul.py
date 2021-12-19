@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from lib.general_utils.sig_int_handler import Activate_Signal_Interrupt_Handler
 import serial #Serial USB
 import socket #UDP LAN
 import rospy
@@ -21,6 +22,8 @@ class UDP_GPS_Parser :
 
     def recv_udp_data(self):
         raw_data, sender = self.sock.recvfrom(self.data_size)
+        print('2==========')
+
         self.data_parsing(raw_data)
 
     def data_parsing(self,raw_data) :
@@ -119,7 +122,8 @@ class SimulIMU():
             self.pub.publish(self.msg)
 
 if __name__ == '__main__':
-    
+    Activate_Signal_Interrupt_Handler()
+
     path = os.path.dirname( os.path.abspath( __file__ ) )
     with open(os.path.join(path,("params.json")),'r') as fp :
         params = json.load(fp)
@@ -134,7 +138,11 @@ if __name__ == '__main__':
     gps = SimulGPS(host_ip, gps_port)
     imu = SimulIMU(host_ip, imu_port)
 
+    cnt = 0
     while not rospy.is_shutdown():
-        print("Simul sensors are on...")
+        cnt +=1 
+        print(f"Simul sensors are on...{cnt}")
+        print('1==========')
         gps.main()
+
         imu.main()

@@ -13,7 +13,7 @@ class environmentVisualizer:
         self.vis_global_path_msg = PointCloud()
         self.vis_global_path_msg.header.frame_id = "map"
 
-        global_path = read_global_path('songdo', 'parking')
+        global_path = read_global_path('songdo', 'parking_sim')
         for i in range(len(global_path.x)):
             self.vis_global_path_msg.points.append(Point32(global_path.x[i], global_path.y[i], 0))
 

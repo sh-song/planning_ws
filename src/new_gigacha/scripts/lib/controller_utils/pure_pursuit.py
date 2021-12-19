@@ -26,20 +26,26 @@ class PurePursuit:
             
         target_index = int(self.state.index + lookahead*10)
         target_x, target_y = path.x[target_index], path.y[target_index]
-
+        print(f"target_index : {target_index}")
         tmp = degrees(atan2(target_y - self.state.y, target_x - self.state.x)) % 360
 
         # if self.state.mode == "backward" :
         #     self.state.heading = (self.state.heading + 180) % 360
-        
 
+        # self.state.heading = (self.state.heading + 260) % 360
+        
+    
         alpha = self.state.heading - tmp
         angle = atan2(2.0 * self.WB * sin(radians(alpha)) / lookahead, 1.0)
+
+        print(f"tmp : {tmp}")
+        print(f"heading : {self.state.heading}")
 
         if self.state.mode == "backward" :
             angle = -angle
 
         return max(min(degrees(angle), 27.0), -27.0)
+        # return angle
 
     
     def deaccel(self):

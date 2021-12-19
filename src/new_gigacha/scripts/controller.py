@@ -26,7 +26,7 @@ class Controller:
         self.update_state = stateUpdater(self.state)
         # self.update_local_path = pathUpdater(self.local_path)
 
-        self.state.target_speed = 2.0 #TODO: decided by mission or map
+        self.state.target_speed = 10.0 #TODO: decided by mission or map
 
         
 
@@ -36,7 +36,7 @@ class Controller:
         self.lon_controller = longitudinalController(self.state)
 
     def run(self):
-        self.lat_controller.make_yaw()
+        # self.lat_controller.make_yaw()
         if self.state.mode == "emergency_stop":            
             self.publish_control_info(1, 2)
 
@@ -71,7 +71,7 @@ class Controller:
             self.control_msg.gear = gear
             self.control_msg.steer = self.lat_controller.run()
             ####################For PID Tuining
-            self.control_msg.steer = 0 
+            # self.control_msg.steer = 0 
             #######################################
             self.control_msg.speed, self.control_msg.brake = self.lon_controller.run()   
             self.control_pub.publish(self.control_msg)

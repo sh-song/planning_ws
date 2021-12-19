@@ -7,7 +7,7 @@ class IndexFinder:
     def run(self):
         min_dis = -1
         min_idx = 0
-        print(len(self.ego.global_path.x))
+        print(f"Global path length: {len(self.ego.global_path.x)}")
         step_size = 100
         for i in range(max(self.ego.index - step_size, 0), self.ego.index + step_size):
             try:

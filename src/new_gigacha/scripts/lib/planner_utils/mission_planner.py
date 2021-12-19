@@ -20,8 +20,10 @@ class MissionPlanner:
 
         print(f"status: {self.ego.status}\n, mode:{self.ego.mode}")
         if self.ego.mission == "parking":
-            dist1 = hypot(self.ego.pose.x - self.ego.global_path.x[1020], \
-                        self.ego.pose.y - self.ego.global_path.y[1020]  )
+            dist1 = hypot(self.ego.pose.x - self.ego.global_path.x[990], \
+                        self.ego.pose.y - self.ego.global_path.y[990]  )
+            # dist1 = hypot(self.ego.pose.x - self.ego.global_path.x[0], \
+            #     self.ego.pose.y - self.ego.global_path.y[0]  )
             print(f"dist1: {dist1}")
             
             
@@ -30,7 +32,7 @@ class MissionPlanner:
                 self.ego.mode = "stop"
                 self.pre_time = time()
 
-            if dist1 < 1 and self.ego.mode == "stop" and time() - self.pre_time > 3:
+            if dist1 < 1.5 and self.ego.mode == "stop" and time() - self.pre_time > 3:
                 self.ego.mode = "parking_driving"
                 self.pre_time = -1
                 self.check = 1
