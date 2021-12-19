@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 from geometry_msgs.msg import Pose, PoseStamped
 from new_gigacha.msg import Local
@@ -18,10 +18,20 @@ class Localization():
         self.vis_msg = PoseStamped()
         self.vis_msg.header.frame_id = "map"
         
-        #Set
-        self.lat_origin = 37.239231667
-        self.lon_origin = 126.773156667
-        self.alt_origin = 15.400
+        #KCity
+        # self.lat_origin = 37.239231667
+        # self.lon_origin = 126.773156667
+        # self.alt_origin = 15.400
+        
+        #Songdo
+        # self.lat_origin = 37.3851693
+        # self.lon_origin = 126.6562271
+        # self.alt_origin = 15.4
+
+        #virtual ground
+        self.lat_origin = 4.83333333333e-05
+        self.lon_origin = 124.511281667
+        self.alt_origin = 15.4
 
         rospy.Subscriber("/simul_gps", Pose, self.gpsCallback)
         rospy.Subscriber("/simul_imu", Pose, self.imuCallback)

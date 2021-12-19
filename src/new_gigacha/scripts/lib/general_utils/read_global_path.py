@@ -14,6 +14,6 @@ def read_global_path(where, name):
                 deg_yaw=(rad2deg(float(line[2]))+360) % 360
                 global_path.heading.append(deg_yaw)
                 global_path.k.append(float(line[3]))
-                global_path.env.append(line[5])
-                global_path.mission.append(line[6])
+                # global_path.env.append(line[5])
+                # global_path.mission.append(line[6])
         return global_path

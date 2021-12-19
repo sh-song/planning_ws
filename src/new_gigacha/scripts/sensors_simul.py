@@ -108,7 +108,6 @@ class SimulIMU():
     def main(self):
         if len(self.imu_parser.parsed_data)==10 :
 
-                
             # print(' ang_vel_x :{0}  ang_vel_y : {1}  ang_vel_z : {2} '.format(round(self.imu_parser.parsed_data[4],2),round(self.imu_parser.parsed_data[5],2),round(self.imu_parser.parsed_data[6],2)))
             # print(' lin_acc_x :{0}  lin_acc_y : {1}  lin_acc_z : {2} '.format(round(self.imu_parser.parsed_data[7],2),round(self.imu_parser.parsed_data[8],2),round(self.imu_parser.parsed_data[9],2)))
 
@@ -116,7 +115,7 @@ class SimulIMU():
             self.msg.orientation.x = self.imu_parser.parsed_data[1]
             self.msg.orientation.y = self.imu_parser.parsed_data[2]
             self.msg.orientation.z = self.imu_parser.parsed_data[3]
-
+            print(self.msg)
             self.pub.publish(self.msg)
 
 if __name__ == '__main__':

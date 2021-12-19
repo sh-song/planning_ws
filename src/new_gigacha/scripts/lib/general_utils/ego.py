@@ -4,8 +4,8 @@ from sensor_msgs.msg import PointCloud
 class EgoVehicle:
     def __init__(self):
         self.mission = "Init"
-        self.mode = "Init" #"global path tracking, local path tracking, emergency stop"
-        self.state ="Ready" #ready, driving
+        self.mode = "driving" 
+        self.status ="Ready" 
         self.pose = Local() #x, y, heading
         self.index = -1
         self.speed = -1

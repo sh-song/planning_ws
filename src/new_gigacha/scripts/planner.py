@@ -16,13 +16,11 @@ class Planner:
         rospy.init_node("Planner", anonymous=False)
         print(f"Planner: Initializing Planner...")
         self.ego = EgoVehicle()
-        self.ego.global_path = read_global_path('kcity', 'final')
-
+        self.ego.global_path = read_global_path('songdo', 'parking')
         self.sensor_hub = SensorHub(self.ego)
         self.path_planner = PathPlanner(self.ego)
         self.whereami = IndexFinder(self.ego)
         self.mission_planner = MissionPlanner(self.ego)
-   
         self.planning_pub = rospy.Publisher("/planner", Planning_Info, queue_size=1)
         self.planning_msg = Planning_Info()
 
@@ -31,7 +29,6 @@ class Planner:
         self.planning_msg.mode = self.ego.mode
         self.planning_msg.local = self.ego.pose
         self.planning_pub.publish(self.planning_msg)
-
 
     def run(self):
         # print(self.ego.obs_map)
