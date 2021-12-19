@@ -2,7 +2,7 @@
 class State:
     def __init__(self):
         self.mission = "Init"
-        self.mode = "Init" #"global path tracking, local path tracking, emergency stop"
+        self.mode = "Init"
         self.status ="Ready" #ready, driving
         self.index = -1
         self.x = -1.0
@@ -13,3 +13,6 @@ class State:
         self.steer = -1.0
         self.gear = -1.0
         self.target_speed = 0.0
+        self.auto_manual = -1.0    
+
+        
