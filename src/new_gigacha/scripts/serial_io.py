@@ -48,6 +48,7 @@ class Serial_IO:
             print(f"Serial_IO: Reading serial {self.alive}")
 
             packet = self.ser.read_until(b'\x0d\x0a')
+            # print("packet")
             if len(packet) == 18:
                 header = packet[0:3].decode()
 
@@ -61,7 +62,10 @@ class Serial_IO:
                     #speed, steer
                     tmp1, tmp2 = struct.unpack("2h", packet[6:10])
                     self.serial_msg.speed = tmp1 / 10  # km/h
+
+                    self.serial_msg.steer = 0  # degree
                     self.serial_msg.steer = tmp2 / 71  # degree
+
 
                     #brake
                     self.serial_msg.brake = struct.unpack("B", packet[10:11])[0]
@@ -80,9 +84,10 @@ class Serial_IO:
         if self.control_input.speed > 20:
             self.control_input.speed = 20
 
+        self.control_input.speed = max(0, min(self.control_input.speed, 20))
+
         if self.control_input.brake > 200:
             self.control_input.brake = 200
-
 
         result = struct.pack(
             ">BBBBBBHhBBBB",
@@ -99,7 +104,6 @@ class Serial_IO:
             0x0D,
             0x0A
         )
-
         self.ser.write(result)
 
 

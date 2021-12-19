@@ -13,10 +13,17 @@ class environmentVisualizer:
         self.vis_global_path_msg = PointCloud()
         self.vis_global_path_msg.header.frame_id = "map"
 
-        global_path = read_global_path('kcity', 'final')
+        global_path = read_global_path('songdo', 'parking_sim')
         for i in range(len(global_path.x)):
             self.vis_global_path_msg.points.append(Point32(global_path.x[i], global_path.y[i], 0))
-    
+
+
+        self.vis_pose_pub = rospy.Publisher("/vis_pose", Odometry, queue_size=1)
+        self.vis_pose_msg = Odometry()
+        self.vis_pose_msg.header.frame_id = "map"
+
+        rospy.Subscriber('/pose', Odometry, self.poseCallback)
+
         # self.obsmap_pub = rospy.Publisher("/vis_map", PointCloud, queue_size=1)
         # self.obsmap = PointCloud()
         # self.obsmap.header.frame_id = "map"
@@ -35,11 +42,18 @@ class environmentVisualizer:
 
         # self.target = PointCloud()
         # self.target.header.frame_id = "map"
+    def poseCallback(self, msg):
+        self.vis_pose_msg.pose.pose.position.x = msg.pose.pose.position.x
+        self.vis_pose_msg.pose.pose.position.y = msg.pose.pose.position.y
 
     def run(self):
         print(f"Publishing maps for visualization")
         self.vis_global_path_msg.header.stamp = rospy.Time.now()
         self.vis_global_path_pub.publish(self.vis_global_path_msg)
+
+
+        self.vis_pose_msg.header.stamp = rospy.Time.now()
+        self.vis_pose_pub.publish(self.vis_pose_msg)
 
 
         # self.obsmap.points = self.ego.obs_map.points

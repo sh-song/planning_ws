@@ -118,7 +118,7 @@ catkin_package(
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 
-  INCLUDE_DIRS include
+  #INCLUDE_DIRS include
   LIBRARIES new_gigacha
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs actionlib_msgs message_runtime
 )
