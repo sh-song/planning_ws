@@ -3,6 +3,7 @@ from lib.general_utils.read_global_path import read_global_path
 from lib.controller_utils.pure_pursuit import PurePursuit
 from lib.controller_utils.state import State
 from lib.controller_utils.stanley import Stanley_Method
+from lib.controller_utils.lateral_combined import Combined_Method
 from lib.controller_utils.state_updater import stateUpdater
 from lib.controller_utils.path_updater import pathUpdater
 from lib.controller_utils.longtidudinal_controller import longitudinalController
@@ -26,17 +27,18 @@ class Controller:
         self.update_state = stateUpdater(self.state)
         # self.update_local_path = pathUpdater(self.local_path)
 
-        self.state.target_speed = 2.0 #TODO: decided by mission or map
+        self.state.target_speed = 10.0 #TODO: decided by mission or map
 
         
 
-        self.lat_controller= PurePursuit(self.state, self.global_path, self.local_path) 
-        # self.lat_controller= Stanley_Method(self.state, self.global_path, self.local_path) 
-        self.curve_check = min(max (self.lat_controller.deaccel(), -27), 27)
+        # self.lat_controller= PurePursuit(self.state, self.global_path, self.local_path) 
+        # self.lat_controller= Stanley_Method(self.state, self.global_path, self.local_path)
+        self.lat_controller= Combined_Method(self.state, self.global_path, self.local_path)
+        # self.curve_check = min(max (self.lat_controller.deaccel(), -27), 27)
         self.lon_controller = longitudinalController(self.state)
 
     def run(self):
-        # self.lat_controller.make_yaw()
+        # self.lat_controller.make_yaw()                 #stanley
         if self.state.mode == "emergency_stop":            
             self.publish_control_info(1, 2)
 
@@ -53,10 +55,11 @@ class Controller:
             
         else:
             self.publish_control_info(0, 0)
-            if self.curve_check > 20 :
-                self.state.target_speed = 10.0 - abs(self.curve_check)/10
-            else :
-                self.state.target_speed = 15.0
+            self.state.target_speed = 10.0
+            # if self.curve_check > 20 :
+            #     self.state.target_speed = 10.0 - abs(self.curve_check)/10
+            # else :
+            #     self.state.target_speed = 15.0
 
         print(self.control_msg)
         # velocity = self.state.target_speed, self.state.speed

@@ -3,7 +3,7 @@ from math import hypot, cos, sin, degrees, atan2, radians, pi
 class PurePursuit:
     def __init__(self, state, global_path, local_path):
         self.WB = 1.04 # wheel base
-        self.k = 0.03 #1.5
+        self.k = 0.3 #1.5
         self.lookahead_default = 4.0 #look-ahead default
 
         self.state = state
@@ -40,7 +40,8 @@ class PurePursuit:
         if self.state.mode == "backward" :
             angle = -angle
 
-        return max(min(degrees(angle), 27.0), -27.0)
+        return max(min(degrees(angle), 27.0), -27.0), target_index
+        # return max(min(degrees(angle), 27.0), -27.0)
         # return angle
 
     

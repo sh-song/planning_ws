@@ -5,6 +5,7 @@ from nav_msgs.msg import Odometry
 from new_gigacha.msg import Local
 from lib.general_utils.sig_int_handler import Activate_Signal_Interrupt_Handler
 from lib.general_utils.read_global_path import read_global_path
+from lib.controller_utils.state import State
 
 class environmentVisualizer:
     def __init__(self):
@@ -12,8 +13,13 @@ class environmentVisualizer:
         self.vis_global_path_pub = rospy.Publisher("/vis_global_path", PointCloud, queue_size=1)
         self.vis_global_path_msg = PointCloud()
         self.vis_global_path_msg.header.frame_id = "map"
+        self.vis_trajectory = PointCloud()
+        self.vis_trajectory.header.frame_id = "map"
 
-        global_path = read_global_path('songdo', 'parking_sim')
+
+        self.vis_trajectory_pub = rospy.Publisher("/vis_trajectory", PointCloud, queue_size=1)
+
+        global_path = read_global_path('songdo', 'parking_simul')
         for i in range(len(global_path.x)):
             self.vis_global_path_msg.points.append(Point32(global_path.x[i], global_path.y[i], 0))
 
@@ -22,7 +28,7 @@ class environmentVisualizer:
         self.vis_pose_msg = Odometry()
         self.vis_pose_msg.header.frame_id = "map"
 
-        rospy.Subscriber('/pose', Odometry, self.poseCallback)
+        rospy.Subscriber('/pose', Local, self.poseCallback)
 
         # self.obsmap_pub = rospy.Publisher("/vis_map", PointCloud, queue_size=1)
         # self.obsmap = PointCloud()
@@ -43,8 +49,18 @@ class environmentVisualizer:
         # self.target = PointCloud()
         # self.target.header.frame_id = "map"
     def poseCallback(self, msg):
-        self.vis_pose_msg.pose.pose.position.x = msg.pose.pose.position.x
-        self.vis_pose_msg.pose.pose.position.y = msg.pose.pose.position.y
+
+        # x = msg.pose.pose.position.x
+        # y = msg.pose.pose.position.y
+        x = msg.x
+        y = msg.y
+        self.vis_pose_msg.pose.pose.position.x = x
+        self.vis_pose_msg.pose.pose.position.y = y
+        self.vis_trajectory.header.stamp = rospy.Time.now()
+        
+        self.vis_trajectory.points.append(Point32(x, y, 0))
+
+
 
     def run(self):
         print(f"Publishing maps for visualization")
@@ -54,8 +70,7 @@ class environmentVisualizer:
 
         self.vis_pose_msg.header.stamp = rospy.Time.now()
         self.vis_pose_pub.publish(self.vis_pose_msg)
-
-
+        self.vis_trajectory_pub.publish(self.vis_trajectory)
         # self.obsmap.points = self.ego.obs_map.points
         # self.obsmap.header.stamp = rospy.Time.now()
         # self.obsmap_pub.publish(self.obsmap)

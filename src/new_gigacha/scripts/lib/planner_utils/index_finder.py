@@ -27,3 +27,4 @@ class IndexFinder:
 
             
         self.ego.index = min_idx
+        return self.ego.index
