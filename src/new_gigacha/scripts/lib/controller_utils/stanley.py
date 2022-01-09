@@ -9,6 +9,7 @@ class Stanley_Method:
         self.global_path = global_path
         self.local_path = local_path
         self.yaw = []
+        self.checkpoint = False # after parking, checkpoint is true
 
     def normalize(self, angle):
         while angle > pi:
@@ -39,11 +40,25 @@ class Stanley_Method:
         n_points = len(self.global_path.x)
 
         front_x = self.state.x 
-        front_y = self.state.y 
+        front_y = self.state.y
+        checking = ""
 
         if self.state.mode == "backward":
             for i in range(1106,1236):
+                checking = "number3"
+                dx = front_x - self.global_path.x[i]
+                dy = front_y - self.global_path.y[i]
+
+                dist = sqrt(dx*dx+dy*dy)
+                self.checkpoint = True
                 
+                if dist < min_dist:
+                    min_dist = dist
+                    min_index = i
+
+        elif self.state.mode != "driving" and self.checkpoint == False:
+            for i in range(1236):
+                checking = "number2"
                 dx = front_x - self.global_path.x[i]
                 dy = front_y - self.global_path.y[i]
 
@@ -53,12 +68,11 @@ class Stanley_Method:
                     min_dist = dist
                     min_index = i
 
-        elif self.state.mode != "driving":
-            for i in range(1236):
-                
+        elif self.state.mode == "driving" and self.checkpoint == True :
+            for i in range(1286, n_points):
                 dx = front_x - self.global_path.x[i]
                 dy = front_y - self.global_path.y[i]
-
+                checking = "number4"
                 dist = sqrt(dx*dx+dy*dy)
                 
                 if dist < min_dist:
@@ -66,7 +80,7 @@ class Stanley_Method:
                     min_index = i
         else:
             for i in range(n_points):
-                
+                checking = "number1"
                 dx = front_x - self.global_path.x[i]
                 dy = front_y - self.global_path.y[i]
 
@@ -75,7 +89,7 @@ class Stanley_Method:
                 if dist < min_dist:
                     min_dist = dist
                     min_index = i
-
+    
 
         map_x =  self.global_path.x[min_index]
         map_y =  self.global_path.y[min_index]
@@ -109,6 +123,7 @@ class Stanley_Method:
         # print(f"yaw_term : {degrees(yaw_term)}")
         # print(f"cte_term : {degrees(cte_term)}")
         print(f"-----index : {min_index}")
+        print(f"state : {checking}")
 
         return max(min((steer)*direction, 27.0), -27.0)
         # return steer
