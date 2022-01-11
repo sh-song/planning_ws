@@ -18,7 +18,7 @@ class Planner:
         print(f"Planner: Initializing Planner...")
         self.ego = EgoVehicle()
         #self.ego.global_path = read_global_path('songdo', 'parking')
-        self.ego.global_path = read_global_path('songdo', 'parking_sim')
+        self.ego.global_path = read_global_path('songdo', 'parking_simul')
 
         self.sensor_hub = SensorHub(self.ego)
         self.path_planner = PathPlanner(self.ego)
