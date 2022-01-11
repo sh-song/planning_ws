@@ -34,6 +34,7 @@ class PurePursuit:
         alpha = self.state.heading - tmp
         angle = atan2(2.0 * self.WB * sin(radians(alpha)) / lookahead, 1.0)
 
+        print(f"target_index : {target_index}")
         print(f"tmp : {tmp}")
         print(f"heading : {self.state.heading}")
 

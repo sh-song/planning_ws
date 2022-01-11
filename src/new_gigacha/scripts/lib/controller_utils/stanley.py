@@ -35,61 +35,62 @@ class Stanley_Method:
         else:
             path = self.global_path
 
-        min_dist = 1e9
-        min_index = 0
-        n_points = len(self.global_path.x)
+        # min_dist = 1e9
+        # min_index = 0
+        # n_points = len(self.global_path.x)
 
         front_x = self.state.x 
         front_y = self.state.y
-        checking = ""
+        # checking = ""
 
-        if self.state.mode == "backward":
-            for i in range(1106,1236):
-                checking = "number3"
-                dx = front_x - self.global_path.x[i]
-                dy = front_y - self.global_path.y[i]
+        # if self.state.mode == "backward":
+        #     for i in range(1106,1236):
+        #         checking = "number3"
+        #         dx = front_x - self.global_path.x[i]
+        #         dy = front_y - self.global_path.y[i]
 
-                dist = sqrt(dx*dx+dy*dy)
-                self.checkpoint = True
+        #         dist = sqrt(dx*dx+dy*dy)
+        #         self.checkpoint = True
                 
-                if dist < min_dist:
-                    min_dist = dist
-                    min_index = i
+        #         if dist < min_dist:
+        #             min_dist = dist
+        #             min_index = i
 
-        elif self.state.mode != "driving" and self.checkpoint == False:
-            for i in range(1236):
-                checking = "number2"
-                dx = front_x - self.global_path.x[i]
-                dy = front_y - self.global_path.y[i]
+        # elif self.state.mode != "driving" and self.checkpoint == False:
+        #     for i in range(1236):
+        #         checking = "number2"
+        #         dx = front_x - self.global_path.x[i]
+        #         dy = front_y - self.global_path.y[i]
 
-                dist = sqrt(dx*dx+dy*dy)
+        #         dist = sqrt(dx*dx+dy*dy)
                 
-                if dist < min_dist:
-                    min_dist = dist
-                    min_index = i
+        #         if dist < min_dist:
+        #             min_dist = dist
+        #             min_index = i
 
-        elif self.state.mode == "driving" and self.checkpoint == True :
-            for i in range(1286, n_points):
-                dx = front_x - self.global_path.x[i]
-                dy = front_y - self.global_path.y[i]
-                checking = "number4"
-                dist = sqrt(dx*dx+dy*dy)
+        # elif self.state.mode == "driving" and self.checkpoint == True :
+        #     for i in range(1286, n_points):
+        #         dx = front_x - self.global_path.x[i]
+        #         dy = front_y - self.global_path.y[i]
+        #         checking = "number4"
+        #         dist = sqrt(dx*dx+dy*dy)
                 
-                if dist < min_dist:
-                    min_dist = dist
-                    min_index = i
-        else:
-            for i in range(n_points):
-                checking = "number1"
-                dx = front_x - self.global_path.x[i]
-                dy = front_y - self.global_path.y[i]
+        #         if dist < min_dist:
+        #             min_dist = dist
+        #             min_index = i
+        # else:
+        #     for i in range(n_points):
+        #         checking = "number1"
+        #         dx = front_x - self.global_path.x[i]
+        #         dy = front_y - self.global_path.y[i]
 
-                dist = sqrt(dx*dx+dy*dy)
+        #         dist = sqrt(dx*dx+dy*dy)
 
-                if dist < min_dist:
-                    min_dist = dist
-                    min_index = i
+        #         if dist < min_dist:
+        #             min_dist = dist
+        #             min_index = i
     
+        min_index = self.state.index
 
         map_x =  self.global_path.x[min_index]
         map_y =  self.global_path.y[min_index]
@@ -115,11 +116,10 @@ class Stanley_Method:
 
         direction = 1
         # steering
-        if self.state.gear == 2:
+        if self.state.mode == "backward":
             direction = -1
         steer = degrees(yaw_term + cte_term)
-        # if self.state.mode == "backward":
-        #     steer = -steer
+        
         # print(f"yaw_term : {degrees(yaw_term)}")
         # print(f"cte_term : {degrees(cte_term)}")
         print(f"-----index : {min_index}")
