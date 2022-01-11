@@ -123,7 +123,6 @@ class Stanley_Method:
         # print(f"yaw_term : {degrees(yaw_term)}")
         # print(f"cte_term : {degrees(cte_term)}")
         print(f"-----index : {min_index}")
-        print(f"state : {checking}")
 
         return max(min((steer)*direction, 27.0), -27.0)
         # return steer
