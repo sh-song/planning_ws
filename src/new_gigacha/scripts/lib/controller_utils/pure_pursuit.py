@@ -34,15 +34,15 @@ class PurePursuit:
         alpha = self.state.heading - tmp
         angle = atan2(2.0 * self.WB * sin(radians(alpha)) / lookahead, 1.0)
 
-        print(f"target_index : {target_index}")
+
         print(f"tmp : {tmp}")
         print(f"heading : {self.state.heading}")
 
         if self.state.mode == "backward" :
             angle = -angle
 
-        return max(min(degrees(angle), 27.0), -27.0), target_index
-        # return max(min(degrees(angle), 27.0), -27.0)
+        # return max(min(degrees(angle), 27.0), -27.0), target_index
+        return max(min(degrees(angle), 27.0), -27.0)
         # return angle
 
     
